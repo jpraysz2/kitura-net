@@ -358,8 +358,9 @@ public class IncomingHTTPSocketProcessor: IncomingSocketProcessor {
                 if let strongSelf = self, let strongRequest = weakRequest {
                     Monitor.delegate?.started(request: strongRequest, response: response)
                     strongSelf.delegate?.handle(request: strongRequest, response: response)
-                    semaphore.signal()
+                    
                 }
+                semaphore.signal()
             }
         }
     }
