@@ -94,7 +94,7 @@ public class HTTPServer: Server {
     public var allowPortReuse: Bool = false
 
     /// Maximum number of pending connections
-    private let maxPendingConnections = 10000
+    private let maxPendingConnections = 1000
 
     /**
      Controls the maximum number of requests per Keep-Alive connection.
