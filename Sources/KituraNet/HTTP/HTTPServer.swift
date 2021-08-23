@@ -356,9 +356,10 @@ public class HTTPServer: Server {
             do {
                 let clientSocket = try listenSocket.acceptClientConnection(invokeDelegate: false)
                 let clientSource = "\(clientSocket.remoteHostname):\(clientSocket.remotePort)"
-                if let connectionLimit = self.options.connectionLimit, socketManager.socketHandlerCount >= connectionLimit {
+                while let connectionLimit = self.options.connectionLimit, socketManager.socketHandlerCount >= connectionLimit {
                     // See if any idle sockets can be removed before rejecting this connection
                     socketManager.removeIdleSockets(runNow: true)
+                    sleep(0.1)
                 }
                 if let connectionLimit = self.options.connectionLimit, socketManager.socketHandlerCount >= connectionLimit {
                     // Connections still at limit, this connection must be rejected
