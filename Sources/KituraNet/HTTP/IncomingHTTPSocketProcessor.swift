@@ -36,6 +36,7 @@ This class processes the data sent by the client after the data was read. The da
  processor.write(from: utf8, length: utf8Length)
  ````
  */
+let semaphore = DispatchSemaphore(value: 8)
 public class IncomingHTTPSocketProcessor: IncomingSocketProcessor {
     
     /**
@@ -352,10 +353,12 @@ public class IncomingHTTPSocketProcessor: IncomingSocketProcessor {
         }
         else {
             weak var weakRequest = request
+            semaphore.wait()
             DispatchQueue.global().async() { [weak self] in
                 if let strongSelf = self, let strongRequest = weakRequest {
                     Monitor.delegate?.started(request: strongRequest, response: response)
                     strongSelf.delegate?.handle(request: strongRequest, response: response)
+                    semaphore.signal()
                 }
             }
         }
